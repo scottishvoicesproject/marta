@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1.0, user-scalable=no" />
+  <title>Scottish Voices Project</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+  <script type="module" src="script.js" defer></script>
+</head>
+<body>
+  <!-- Intro Form -->
+  <div id="intro-box" class="intro-box">
+    <h1>Welcome to the Scottish Voices Project!</h1>
+    <form id="age-gender-form" autocomplete="off">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" min="4" max="17" required />
+
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="">Select gender</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+        <option value="O">Other</option>
+      </select>
+
+      <label for="scottish">Are you Scottish?</label>
+      <select id="scottish" name="scottish" required>
+        <option value="">Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      
+      <button type="submit" class="blue-button">Start Task</button>
+      <div id="error-message"></div>
+    </form>
+  </div>
+
+  <!-- Orientation Warning -->
+  <div id="rotate-warning">🔄 Please rotate your device to landscape to continue.</div>
+
+  <!-- Task Section -->
+  <section id="sorting-section">
+    <h2 class="task-title">Sorting Task</h2>
+
+    <div id="instructions">
+      <p>🎧 <strong>Click</strong> an icon to hear a speaker. They’re all saying the same sentence. Drag the icons into the grid to <strong>group</strong> speakers who are <strong>similar in how they speak</strong>.</p>
+      <p>✋ Place icons closely next to each other if they feel like a match, or apart if they don’t. Just trust your ear.</p>
+      <p>🧩 Make as many or as few groups as you like, and <strong>keep the icons inside the grid</strong> so we can see your results clearly.</p>
+      <button id="hide-instructions" class="blue-button">Hide Instructions</button>
+    </div>
+
+    <button id="show-instructions" class="blue-button" style="display: none;">Show Instructions</button>
+
+    <div id="task-wrapper">
+      <div id="sorting-container">
+        <div id="grid-hint">Drop icons anywhere inside this grid</div>
+      </div>
+    </div>
+
+    <button id="submit-button">Submit Task</button>
+    <div id="submission-loading" style="
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    ">
+  Submitting your response, please wait...
+    </div> <!-- End of #submission-loading -->
+  </section>
+
+</body>
+</html>
