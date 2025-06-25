@@ -333,7 +333,7 @@ function setupSubmissionHandler() {
     const confirmed = confirm("Are you sure you want to submit the task?");
     if (!confirmed) return;
 
-    // 🔐 Prevent submission until auth is confirmed
+    // 🔐 Block if auth hasn’t completed
     if (typeof authReady !== "undefined" && !authReady) {
       alert("Authentication is still initializing. Please wait a moment and try again.");
       return;
@@ -365,7 +365,10 @@ function setupSubmissionHandler() {
 
       console.log("🔥 SUBMITTING TO FIRESTORE:", submissionData);
 
-      addDoc(collection(db, "submissions"), submissionData)
+      const submissionsRef = collection(db, "submissions");
+      console.log("📌 Collection reference:", submissionsRef.path);
+
+      addDoc(submissionsRef, submissionData)
         .then(docRef => {
           const filePath = `screenshots/${docRef.id}.png`;
           const fileRef = ref(storage, filePath);
@@ -396,4 +399,3 @@ function setupSubmissionHandler() {
     });
   });
 }
-
