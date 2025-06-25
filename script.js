@@ -1,6 +1,6 @@
 // ✅ Firebase Setup – Project B only
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
 
@@ -16,10 +16,21 @@ const firebaseConfig = {
 // 🔧 Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// 🔐 Enable anonymous sign-in
+// 🔐 Enable anonymous sign-in and track readiness
 const auth = getAuth(app);
+let authReady = false;
+
 signInAnonymously(auth).catch((error) => {
   console.error("❌ Anonymous sign-in failed:", error);
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("✅ Anonymous user signed in:", user.uid);
+    authReady = true;
+  } else {
+    console.warn("⏳ Waiting for authentication...");
+  }
 });
 
 // 🔥 Set up Firestore and Storage
@@ -322,6 +333,12 @@ function setupSubmissionHandler() {
     const confirmed = confirm("Are you sure you want to submit the task?");
     if (!confirmed) return;
 
+    // 🔐 Prevent submission until auth is confirmed
+    if (typeof authReady !== "undefined" && !authReady) {
+      alert("Authentication is still initializing. Please wait a moment and try again.");
+      return;
+    }
+
     if (loadingOverlay) loadingOverlay.style.display = 'flex';
 
     html2canvas(document.getElementById('task-wrapper')).then(canvas => {
@@ -347,36 +364,36 @@ function setupSubmissionHandler() {
       };
 
       console.log("🔥 SUBMITTING TO FIRESTORE:", submissionData);
-      console.log("🧪 Attempting to write to Firestore:", submissionData);
 
       addDoc(collection(db, "submissions"), submissionData)
-      .then(docRef => {
-        const filePath = `screenshots/${docRef.id}.png`;
-        const fileRef = ref(storage, filePath);
+        .then(docRef => {
+          const filePath = `screenshots/${docRef.id}.png`;
+          const fileRef = ref(storage, filePath);
 
-        const byteString = atob(screenshotData.split(',')[1]);
-        const intArray = new Uint8Array(byteString.length);
-        for (let i = 0; i < byteString.length; i++) {
-          intArray[i] = byteString.charCodeAt(i);
-        }
+          const byteString = atob(screenshotData.split(',')[1]);
+          const intArray = new Uint8Array(byteString.length);
+          for (let i = 0; i < byteString.length; i++) {
+            intArray[i] = byteString.charCodeAt(i);
+          }
 
-        const blob = new Blob([intArray], { type: 'image/png' });
+          const blob = new Blob([intArray], { type: 'image/png' });
 
-        return uploadBytes(fileRef, blob)
-          .then(() => updateDoc(doc(db, "submissions", docRef.id), {
-            screenshot: filePath
-          }))
-          .then(() => getDownloadURL(fileRef))
-          .then(downloadURL => {
-            sessionStorage.setItem('assignedCondition', cond);
-            window.location.href = `thankyou.html?cond=${cond}&screenshot=${encodeURIComponent(downloadURL)}`;
-          });
-      })
-      .catch(err => {
-        if (loadingOverlay) loadingOverlay.style.display = 'none';
-        console.error("❌ Submission failed:", err);
-        alert("There was a problem saving your work. Please check your connection and try again.");
-      });
+          return uploadBytes(fileRef, blob)
+            .then(() => updateDoc(doc(db, "submissions", docRef.id), {
+              screenshot: filePath
+            }))
+            .then(() => getDownloadURL(fileRef))
+            .then(downloadURL => {
+              sessionStorage.setItem('assignedCondition', cond);
+              window.location.href = `thankyou.html?cond=${cond}&screenshot=${encodeURIComponent(downloadURL)}`;
+            });
+        })
+        .catch(err => {
+          if (loadingOverlay) loadingOverlay.style.display = 'none';
+          console.error("❌ Submission failed:", err);
+          alert("There was a problem saving your work. Please check your connection and try again.");
+        });
     });
   });
 }
+
