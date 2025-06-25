@@ -46,15 +46,18 @@
   <div class="thankyou-container">
     <h2>Thank you for completing the task.</h2>
     <p>
-      This project explores how people perceive differences in speech across Scotland. Each speaker you sorted came from one of three regions — Aberdeen, Dundee, or Glasgow — and spoke either in <strong>Scottish English</strong> or <strong>Scots</strong> (or <strong>Scots pronunciation</strong>, depending on your condition). Some participants notice patterns by region, others by variety, and many use a mix of cues without realizing it.
+      This project investigates how well people in Scotland are able to distinguish between different accents in Scotland. Each speaker you sorted came from one of three regions: Aberdeen, Dundee, or Glasgow. Depending on the version you landed on, the speakers were using their own regional variety of <strong>Scottish English</strong> or <strong>Scots</strong>. Alternatively, some speakers used <strong>Scots pronunciation</strong> with more standard vocabulary.
     </p>
     <p>
-      There wasn’t one “correct” answer — your groupings help us understand what stands out naturally to listeners.  
-      If you're curious, we've listed the speakers you heard and their background just below. You can compare them to your grouping to see whether region or variety might’ve influenced your decisions.
+      Your groupings help us understand when regional accent stands out most to listeners.  
+      If you're curious, we've listed the speakers you heard and their background just below. You can compare them to your own groupings that we captured.
     </p>
 
     <h3>Your groupings:</h3>
     <div id="participant-view"></div>
+
+    <h3>Speakers you heard:</h3>
+    <ul id="condition-info-list"></ul>
 
     <h3>Speakers you heard:</h3>
     <ul id="condition-info-list"></ul>
@@ -135,14 +138,22 @@
       };
 
       const conditions = {
-        M_SSEvsP1: ['GI','PX','TV','BF','MB','CQ','KN','UI','EQ','TE','DM','EW'],
-        M_SSEvsP2: ['TD','DG','WI','QE','HY','XU','VO','EL','JG','WR','UN','HZ'],
-        M_SSEvsL1: ['US','TK','MB','KN','EQ','MF','GI','TV','QN','FI','DM','RU'],
-        M_SSEvsL2: ['TD','DG','KD','EK','QE','XU','VI','HS','WI','EL','PP','WW'],
-        F_SSEvsP1: ['XL','WN','KY','GQ','YR','VW','RX','BN','KX','BK','MP','PM'],
-        F_SSEvsP2: ['IT','KZ','JS','RN','MW','XN','RF','LM','ZY','DI','PR','HG'],
-        F_SSEvsL1: ['YR','FN','WN','BK','XL','OS','BN','GQ','ZP','SJ','KL','VG'],
-        F_SSEvsL2: ['MC','MM','ZY','KP','KK','JY','MW','RF','XN','RN','PR','JT']
+        F_SSE: ["ZY","XN","YR","MW","RN","PR","BN","BK","XL","RF","WN","GQ"],
+        F_ScotsL: ["OS","VG","KL","SJ","MM","MC","JY","KK","JT","KP","ZP","FN"],
+        F_ScotsP: ["KZ","DI","IT","RX","LM","VW","JS","KY","KX","HG","MP","PM"],
+        M_SSE: ["DM","XU","TV","MB","KN","DG","EQ","EL","TD","QE","GI","WI"],
+        M_ScotsL: ["FI","TK","QN","EK","VI","RU","WW","US","MF","KD","HS","PP"],
+        M_ScotsP: ["UI","WR","HY","HZ","BF","EW","UN","VO","PX","CQ","TE","JG"]
+      };
+
+
+      const conditions = {
+        F_SSE: ["ZY","XN","YR","MW","RN","PR","BN","BK","XL","RF","WN","GQ"],
+        F_ScotsL: ["OS","VG","KL","SJ","MM","MC","JY","KK","JT","KP","ZP","FN"],
+        F_ScotsP: ["KZ","DI","IT","RX","LM","VW","JS","KY","KX","HG","MP","PM"],
+        M_SSE: ["DM","XU","TV","MB","KN","DG","EQ","EL","TD","QE","GI","WI"],
+        M_ScotsL: ["FI","TK","QN","EK","VI","RU","WW","US","MF","KD","HS","PP"],
+        M_ScotsP: ["UI","WR","HY","HZ","BF","EW","UN","VO","PX","CQ","TE","JG"]
       };
 
       const params = new URLSearchParams(window.location.search);
@@ -161,7 +172,7 @@
         document.getElementById('participant-view').appendChild(img);
       }
 
-      const isPronCondition = cond && (cond.includes("P1") || cond.includes("P2"));
+      const isPronCondition = cond === "F_ScotsP" || cond === "M_ScotsP";
       const infoList = document.getElementById('condition-info-list');
 
       if (!cond || speakers.length === 0) {
@@ -172,7 +183,9 @@
         const sorted = speakers.map(code => {
           const info = speakerInfo[code];
           if (!info) return null;
-          const variety = (info.variety === "Scots" && isPronCondition) ? "Scots pronunciation" : info.variety;
+          const variety = (info.variety === "Scots" && isPronCondition)
+            ? "Scots pronunciation"
+            : info.variety;
           return { code, region: info.region, variety };
         }).filter(Boolean).sort((a, b) => {
           const r = a.region.localeCompare(b.region);
@@ -191,6 +204,6 @@
       <p style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">Thank you for taking part! 😊</p>
       <p style="font-size: 1.2rem;">You may now close this tab.</p>
     </div>
-  </div> <!-- thankyou-container -->
+  </div>
 </body>
 </html>
