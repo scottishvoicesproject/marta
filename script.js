@@ -17,6 +17,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 let cond = null; // 🌍 Global assignment key
+let audioPlaying = null;
 
 // 🎙️ Speaker Conditions – Project B
 const conditions = {
