@@ -1,5 +1,6 @@
 // ✅ Firebase Setup – Project B only
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-storage.js";
 
@@ -12,7 +13,16 @@ const firebaseConfig = {
   appId: "1:496764815994:web:4b413995a0a67e400e89c3"
 };
 
+// 🔧 Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// 🔐 Enable anonymous sign-in
+const auth = getAuth(app);
+signInAnonymously(auth).catch((error) => {
+  console.error("❌ Anonymous sign-in failed:", error);
+});
+
+// 🔥 Set up Firestore and Storage
 const db = getFirestore(app);
 const storage = getStorage(app);
 
