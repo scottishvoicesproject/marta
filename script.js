@@ -337,6 +337,7 @@ function setupSubmissionHandler() {
       };
 
       console.log("🔥 SUBMITTING TO FIRESTORE:", submissionData);
+      console.log("🧪 Attempting to write to Firestore:", submissionData);
 
       addDoc(collection(db, "submissions"), submissionData)
       .then(docRef => {
