@@ -8,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBsYc3qIZHTwgbHE09xIN76XjfBvHjzwNI",
   authDomain: "marta-d4934.firebaseapp.com",
   projectId: "marta-d4934",
-  storageBucket: "marta-d4934.appspot.com",
+  storageBucket: "marta-d4934.firebasestorage.app",
   messagingSenderId: "496764815994",
   appId: "1:496764815994:web:4b413995a0a67e400e89c3"
 };
