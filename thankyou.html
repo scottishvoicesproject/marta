@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .thankyou-container {
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    h2, h3, h4 {
+      color: #007b7f;
+    }
+
+    #participant-view img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    ul#condition-info-list {
+      padding-left: 0;
+      list-style-type: none;
+    }
+
+    ul#condition-info-list li {
+      background: #fff;
+      padding: 8px 12px;
+      margin-bottom: 5px;
+      border-left: 4px solid #007b7f;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="thankyou-container">
+    <h2>Thank you for completing the task.</h2>
+    <p>
+      This project explores how people perceive differences in speech across Scotland. Each speaker you sorted came from one of three regions — Aberdeen, Dundee, or Glasgow — and spoke either in <strong>Scottish English</strong> or <strong>Scots</strong> (or <strong>Scots pronunciation</strong>, depending on your condition). Some participants notice patterns by region, others by variety, and many use a mix of cues without realizing it.
+    </p>
+    <p>
+      There wasn’t one “correct” answer — your groupings help us understand what stands out naturally to listeners.  
+      If you're curious, we've listed the speakers you heard and their background just below. You can compare them to your grouping to see whether region or variety might’ve influenced your decisions.
+    </p>
+
+    <h3>Your groupings:</h3>
+    <div id="participant-view"></div>
+
+    <h3>Speakers you heard:</h3>
+    <ul id="condition-info-list"></ul>
+    <script>
+      const speakerInfo = {
+        TE: { region: "Aberdeen", variety: "Scots" },
+        CQ: { region: "Aberdeen", variety: "Scots" },
+        UI: { region: "Dundee", variety: "Scots" },
+        BF: { region: "Dundee", variety: "Scots" },
+        EW: { region: "Glasgow", variety: "Scots" },
+        PX: { region: "Glasgow", variety: "Scots" },
+        MB: { region: "Aberdeen", variety: "Scottish English" },
+        TV: { region: "Aberdeen", variety: "Scottish English" },
+        GI: { region: "Dundee", variety: "Scottish English" },
+        EQ: { region: "Dundee", variety: "Scottish English" },
+        KN: { region: "Glasgow", variety: "Scottish English" },
+        DM: { region: "Glasgow", variety: "Scottish English" },
+        VO: { region: "Aberdeen", variety: "Scots" },
+        HY: { region: "Aberdeen", variety: "Scots" },
+        JG: { region: "Dundee", variety: "Scots" },
+        HZ: { region: "Dundee", variety: "Scots" },
+        UN: { region: "Glasgow", variety: "Scots" },
+        WR: { region: "Glasgow", variety: "Scots" },
+        QE: { region: "Aberdeen", variety: "Scottish English" },
+        WI: { region: "Aberdeen", variety: "Scottish English" },
+        DG: { region: "Dundee", variety: "Scottish English" },
+        TD: { region: "Dundee", variety: "Scottish English" },
+        EL: { region: "Glasgow", variety: "Scottish English" },
+        XU: { region: "Glasgow", variety: "Scottish English" },
+        QN: { region: "Aberdeen", variety: "Scots" },
+        TK: { region: "Aberdeen", variety: "Scots" },
+        RU: { region: "Dundee", variety: "Scots" },
+        FI: { region: "Dundee", variety: "Scots" },
+        MF: { region: "Glasgow", variety: "Scots" },
+        US: { region: "Glasgow", variety: "Scots" },
+        PP: { region: "Aberdeen", variety: "Scots" },
+        EK: { region: "Aberdeen", variety: "Scots" },
+        WW: { region: "Dundee", variety: "Scots" },
+        VI: { region: "Dundee", variety: "Scots" },
+        KD: { region: "Glasgow", variety: "Scots" },
+        HS: { region: "Glasgow", variety: "Scots" },
+        GQ: { region: "Aberdeen", variety: "Scottish English" },
+        BK: { region: "Aberdeen", variety: "Scottish English" },
+        YR: { region: "Dundee", variety: "Scottish English" },
+        WN: { region: "Dundee", variety: "Scottish English" },
+        XL: { region: "Glasgow", variety: "Scottish English" },
+        BN: { region: "Glasgow", variety: "Scottish English" },
+        MP: { region: "Aberdeen", variety: "Scots" },
+        RX: { region: "Aberdeen", variety: "Scots" },
+        KY: { region: "Dundee", variety: "Scots" },
+        KX: { region: "Dundee", variety: "Scots" },
+        PM: { region: "Glasgow", variety: "Scots" },
+        VW: { region: "Glasgow", variety: "Scots" },
+        HG: { region: "Aberdeen", variety: "Scots" },
+        DI: { region: "Aberdeen", variety: "Scots" },
+        JS: { region: "Dundee", variety: "Scots" },
+        KZ: { region: "Dundee", variety: "Scots" },
+        LM: { region: "Glasgow", variety: "Scots" },
+        IT: { region: "Glasgow", variety: "Scots" },
+        MW: { region: "Aberdeen", variety: "Scottish English" },
+        RF: { region: "Aberdeen", variety: "Scottish English" },
+        ZY: { region: "Dundee", variety: "Scottish English" },
+        RN: { region: "Dundee", variety: "Scottish English" },
+        PR: { region: "Glasgow", variety: "Scottish English" },
+        XN: { region: "Glasgow", variety: "Scottish English" },
+        ZP: { region: "Aberdeen", variety: "Scots" },
+        VG: { region: "Aberdeen", variety: "Scots" },
+        KL: { region: "Dundee", variety: "Scots" },
+        OS: { region: "Dundee", variety: "Scots" },
+        FN: { region: "Glasgow", variety: "Scots" },
+        SJ: { region: "Glasgow", variety: "Scots" },
+        JY: { region: "Aberdeen", variety: "Scots" },
+        MM: { region: "Aberdeen", variety: "Scots" },
+        KP: { region: "Dundee", variety: "Scots" },
+        MC: { region: "Dundee", variety: "Scots" },
+        KK: { region: "Glasgow", variety: "Scots" },
+        JT: { region: "Glasgow", variety: "Scots" }
+      };
+
+      const conditions = {
+        M_SSEvsP1: ['GI','PX','TV','BF','MB','CQ','KN','UI','EQ','TE','DM','EW'],
+        M_SSEvsP2: ['TD','DG','WI','QE','HY','XU','VO','EL','JG','WR','UN','HZ'],
+        M_SSEvsL1: ['US','TK','MB','KN','EQ','MF','GI','TV','QN','FI','DM','RU'],
+        M_SSEvsL2: ['TD','DG','KD','EK','QE','XU','VI','HS','WI','EL','PP','WW'],
+        F_SSEvsP1: ['XL','WN','KY','GQ','YR','VW','RX','BN','KX','BK','MP','PM'],
+        F_SSEvsP2: ['IT','KZ','JS','RN','MW','XN','RF','LM','ZY','DI','PR','HG'],
+        F_SSEvsL1: ['YR','FN','WN','BK','XL','OS','BN','GQ','ZP','SJ','KL','VG'],
+        F_SSEvsL2: ['MC','MM','ZY','KP','KK','JY','MW','RF','XN','RN','PR','JT']
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const cond = params.get('cond');
+      const screenshot = params.get('screenshot');
+      const speakers = conditions[cond] || [];
+
+      if (screenshot) {
+        const label = document.createElement('h4');
+        label.textContent = "Visual snapshot of your groupings:";
+        document.getElementById('participant-view').appendChild(label);
+
+        const img = new Image();
+        img.src = screenshot;
+        img.alt = "Screenshot of your submission";
+        document.getElementById('participant-view').appendChild(img);
+      }
+
+      const isPronCondition = cond && (cond.includes("P1") || cond.includes("P2"));
+      const infoList = document.getElementById('condition-info-list');
+
+      if (!cond || speakers.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = "No condition was found or recognized.";
+        infoList.appendChild(li);
+      } else {
+        const sorted = speakers.map(code => {
+          const info = speakerInfo[code];
+          if (!info) return null;
+          const variety = (info.variety === "Scots" && isPronCondition) ? "Scots pronunciation" : info.variety;
+          return { code, region: info.region, variety };
+        }).filter(Boolean).sort((a, b) => {
+          const r = a.region.localeCompare(b.region);
+          return r !== 0 ? r : a.variety.localeCompare(b.variety);
+        });
+
+        sorted.forEach(({ code, region, variety }) => {
+          const li = document.createElement('li');
+          li.textContent = `${code} — ${region} — ${variety}`;
+          infoList.appendChild(li);
+        });
+      }
+    </script>
+
+    <div style="margin-top: 40px; text-align: center;">
+      <p style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">Thank you for taking part! 😊</p>
+      <p style="font-size: 1.2rem;">You may now close this tab.</p>
+    </div>
+  </div> <!-- thankyou-container -->
+</body>
+</html>
